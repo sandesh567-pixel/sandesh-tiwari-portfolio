@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Mail, Phone, MapPin } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,13 +50,9 @@ const ContactSection = () => {
   return (
     <section id="contact" className="py-24 bg-gradient-to-b from-background/50 to-secondary">
       <div className="container mx-auto px-4">
-        <SectionHeading 
-          title="Get In Touch" 
-          subtitle="Ready to start your project?" 
-          className="text-center mb-20"
-        />
+        <SectionHeading title="Get In Touch" subtitle="Ready to start your project?" />
         
-        <div className="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto mt-16">
           {/* Contact Info Cards */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -76,7 +73,11 @@ const ContactSection = () => {
                 <Phone className="h-7 w-7 text-green-600" />
               </div>
               <h4 className="text-xl font-bold mb-2">WhatsApp</h4>
-              <p className="text-muted-foreground">+977 - Available 24/7</p>
+              <p className="text-primary font-semibold">
+                <a href="https://wa.me/9779813979853" target="_blank" rel="noopener" className="hover:underline">
+                  +977 9813979853
+                </a>
+              </p>
             </div>
 
             <div className="p-8 bg-card rounded-2xl border border-border shadow-xl hover:shadow-2xl transition-all duration-300">
