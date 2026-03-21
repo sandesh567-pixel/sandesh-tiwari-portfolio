@@ -1,85 +1,145 @@
-import { useState, type FormEvent } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Github, Linkedin, MapPin, Send, Phone } from "lucide-react";
-import { toast } from "sonner";
-
-const contactInfo = [
-  { icon: Mail, label: "sdhtw567@gmail.com", href: "mailto:sdhtw567@gmail.com" },
-  { icon: Github, label: "github.com/sandesh567-pixel", href: "https://github.com/sandesh567-pixel" },
-  { icon: Linkedin, label: "linkedin.com/in/sandeshtiwari", href: "https://linkedin.com/in/sandeshtiwari" },
-  { icon: MapPin, label: "Nepal", href: null },
-];
+import { Send, Mail, Phone, MapPin } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 const ContactSection = () => {
-  const [sending, setSending] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSending(true);
-    setTimeout(() => {
-      toast.success("Message sent! I'll get back to you soon.");
-      (e.target as HTMLFormElement).reset();
-      setSending(false);
-    }, 1000);
+    setIsSubmitting(true);
+
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    try {
+      const response = await fetch("https://formsubmit.co/sdhtw567@gmail.com", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Success!",
+          description: "Message sent successfully!",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send. Try again.",
+          variant: "destructive",
+        });
+      }
+    } catch {
+      toast({
+        title: "Error",
+        description: "Network issue. Check connection.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="contact" className="py-20 bg-secondary">
+    <section id="contact" className="py-24 bg-gradient-to-b from-background/50 to-secondary">
       <div className="container mx-auto px-4">
-        <SectionHeading title="Contact Me" subtitle="Let's work together" />
-        <div className="grid md:grid-cols-5 gap-8 max-w-5xl mx-auto">
-          {/* Contact info */}
+        <SectionHeading 
+          title="Get In Touch" 
+          subtitle="Ready to start your project?" 
+          className="text-center mb-20"
+        />
+        
+        <div className="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          {/* Contact Info Cards */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 space-y-4"
+            className="space-y-6 lg:max-w-md"
           >
-            <div className="p-6 rounded-2xl gradient-bg text-primary-foreground mb-6">
-              <h3 className="text-lg font-display font-bold mb-2">Let's talk!</h3>
-              <p className="text-primary-foreground/80 text-sm leading-relaxed">
-                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
-              </p>
+            <div className="p-8 bg-card rounded-2xl border border-border shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mb-4">
+                <Mail className="h-7 w-7 text-primary-foreground" />
+              </div>
+              <h4 className="text-xl font-bold mb-2">Email Me</h4>
+              <p className="text-primary font-semibold">sdhtw567@gmail.com</p>
+            </div>
+            
+            <div className="p-8 bg-card rounded-2xl border border-border shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-green-500/10 rounded-xl flex items-center justify-center mb-4">
+                <Phone className="h-7 w-7 text-green-600" />
+              </div>
+              <h4 className="text-xl font-bold mb-2">WhatsApp</h4>
+              <p className="text-muted-foreground">+977 - Available 24/7</p>
             </div>
 
-            {contactInfo.map(({ icon: Icon, label, href }) => (
-              <div key={label} className="flex items-center gap-4 p-4 bg-card rounded-xl border border-border card-shadow">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Icon className="h-4 w-4 text-primary" />
-                </div>
-                {href ? (
-                  <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors truncate">
-                    {label}
-                  </a>
-                ) : (
-                  <span className="text-sm text-muted-foreground">{label}</span>
-                )}
+            <div className="p-8 bg-card rounded-2xl border border-border shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-4">
+                <MapPin className="h-7 w-7 text-blue-600" />
               </div>
-            ))}
+              <h4 className="text-xl font-bold mb-2">Location</h4>
+              <p className="text-muted-foreground">Kathmandu, Nepal</p>
+            </div>
           </motion.div>
 
           {/* Form */}
-          <motion.form
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            onSubmit={handleSubmit}
-            className="md:col-span-3 p-6 bg-card rounded-2xl border border-border card-shadow space-y-4"
+            transition={{ delay: 0.2 }}
+            className="space-y-6"
           >
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Input placeholder="Your Name" required className="rounded-xl" />
-              <Input type="email" placeholder="Your Email" required className="rounded-xl" />
-            </div>
-            <Input placeholder="Subject" required className="rounded-xl" />
-            <Textarea placeholder="Your Message" rows={5} required className="rounded-xl resize-none" />
-            <Button type="submit" disabled={sending} className="w-full rounded-xl" size="lg">
-              <Send className="mr-2 h-4 w-4" /> {sending ? "Sending..." : "Send Message"}
-            </Button>
-          </motion.form>
+            <form onSubmit={handleSubmit} className="bg-card p-8 rounded-2xl border border-border shadow-xl hover:shadow-2xl transition-all duration-300 space-y-6">
+              <input type="hidden" name="_subject" value="Portfolio Contact Form" />
+              <input type="hidden" name="_captcha" value="false" />
+              
+              <Input 
+                required 
+                name="name" 
+                placeholder="Full Name" 
+                className="h-14 text-lg"
+              />
+              
+              <Input 
+                required 
+                type="email" 
+                name="_replyto" 
+                placeholder="Email Address" 
+                className="h-14 text-lg"
+              />
+              
+              <Textarea 
+                required 
+                name="message" 
+                placeholder="Tell me about your project or how I can help you..." 
+                rows={6}
+                className="text-lg resize-none"
+              />
+              
+              <Button 
+                type="submit" 
+                size="lg" 
+                className="w-full h-14 text-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    Send Message
+                    <Send className="ml-2 h-5 w-5" />
+                  </>
+                )}
+              </Button>
+            </form>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -87,3 +147,4 @@ const ContactSection = () => {
 };
 
 export default ContactSection;
+

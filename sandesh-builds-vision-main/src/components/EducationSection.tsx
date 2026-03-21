@@ -5,10 +5,17 @@ import { GraduationCap, Wrench, Calendar } from "lucide-react";
 const items = [
   {
     icon: GraduationCap,
-    title: "Bachelor of Information Technology (BIT)",
-    place: "Texas College of Management & IT",
-    detail: "Currently pursuing",
+    title: "Class 10",
+    place: "Samata Shikshya Niketan",
+detail: "2022 AD",
     color: "bg-primary/10 text-primary",
+  },
+  {
+    icon: GraduationCap,
+    title: "+2 SLC (Science - Physical Group)",
+    place: "Reliance International Academy, Sarswatinagar, Kathmandu",
+detail: "2024 AD",
+    color: "bg-accent text-accent-foreground",
   },
   {
     icon: Wrench,
@@ -16,6 +23,13 @@ const items = [
     place: "CTEVT (Council for Technical Education and Vocational Training)",
     detail: "Duration: 8–9 months",
     color: "bg-accent text-accent-foreground",
+  },
+  {
+    icon: GraduationCap,
+    title: "Bachelor of Information Technology (BIT)",
+    place: "Texas College of Management & IT",
+    detail: "Currently pursuing",
+    color: "bg-primary/10 text-primary",
   },
 ];
 
